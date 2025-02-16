@@ -15,9 +15,11 @@ function App() {
   useEffect(() => {
     socket.on("userId", (id) => {
       setClientId(id);
-      axios.get(`https://wa.ecampusstreet.com/check-auth/${id}`).then((res) => {
-        setIsAuthenticated(res.data.authenticated);
-      });
+      axios
+        .get(`https://wa.ecampusstreet.com/api/check-auth/${id}`)
+        .then((res) => {
+          setIsAuthenticated(res.data.authenticated);
+        });
     });
 
     socket.on("qrCode", setQrCode);
@@ -39,9 +41,12 @@ function App() {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post("https://wa.ecampusstreet.com/logout", {
-        userId: clientId,
-      });
+      const response = await axios.post(
+        "https://wa.ecampusstreet.com/api/logout",
+        {
+          userId: clientId,
+        }
+      );
       alert(response.data.message);
       setIsAuthenticated(false);
       setQrCode(null);
@@ -54,7 +59,7 @@ function App() {
 
   const handleSendBulkMessages = async () => {
     try {
-      await axios.post("https://wa.ecampusstreet.com/send-bulk-messages", {
+      await axios.post("https://wa.ecampusstreet.com/api/send-bulk-messages", {
         userId: clientId,
         message,
       });
